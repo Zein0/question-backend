@@ -7,7 +7,7 @@ function createRoom(roomCode, questions) {
         votes: [],
         commonQuestion: null,
         imposterQuestion: null,
-        allQuestions: questions, // Store all questions in the room initially
+        allQuestions: questions,
         differentPlayerIndex: null,
     };
     rooms.push(room);
@@ -20,9 +20,9 @@ function addPlayerToRoom(roomCode, username, socketId) {
     const player = {
         username,
         socketId,
-        imposter: false, // We'll set this later when assigning questions
-        questionVote: null,  // Vote for who they think had the common question
-        imposterVote: null,  // Vote for who they think is the imposter
+        imposter: false,
+        questionVote: null,
+        imposterVote: null, 
     };
 
     room.players.push(player);
@@ -58,7 +58,7 @@ function resetRoomVotes(roomCode) {
 
 function assignQuestionsToRoom(room) {
     if (room.allQuestions.length < 2) {
-        return false; // Let the caller handle fetching more questions
+        return false;
     }
     const commonQuestionIndex = Math.floor(Math.random() * room.allQuestions.length);
     const commonQuestion = room.allQuestions.splice(commonQuestionIndex, 1)[0]; 
@@ -71,7 +71,6 @@ function assignQuestionsToRoom(room) {
     room.imposterQuestion = imposterQuestion.text;
     room.differentPlayerIndex = differentPlayerIndex;
 
-    // Mark the imposter in the players list
     room.players.forEach((player, index) => {
         player.imposter = index === differentPlayerIndex;
     });
