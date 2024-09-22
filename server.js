@@ -154,18 +154,14 @@ io.on('connection', (socket) => {
     const handleVotingResults = (roomCode) => {
         const room = getRoom(roomCode);
         if (!room) return;
-
+        const votes = room.players.map(p => ({
+            username: p.username,
+            questionVote: p.questionVote,
+        }));
+        io.to(roomCode).emit('revealVotes', votes);
         setTimeout(() => {
             io.to(roomCode).emit('revealCommonQuestion', room.commonQuestion);
-
-            setTimeout(() => {
-                const votes = room.players.map(p => ({
-                    username: p.username,
-                    questionVote: p.questionVote,
-                }));
-                io.to(roomCode).emit('revealVotes', votes);
-            }, 3000);
-        }, 1000);
+        }, 3000);
     };
 
     socket.on('disconnect', () => {
@@ -174,5 +170,5 @@ io.on('connection', (socket) => {
 });
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
-    console.log('Server is running on port 3000');
+    console.log('Server is running on port ',);
 });
